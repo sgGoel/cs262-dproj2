@@ -187,3 +187,5 @@ We started by drawing out the theory behind the logical clock on an iPad and the
 ### Design Notes
 A drawback of our design is n machines $\rightarrow$ $3n^2$ sockets. In general, I dislike anything which goes like $n^2$. The TF's design had producer and consumer threads (we kept this), and a global variable (we scrapped this). We prefer to model the distributed system without a global variable, understanding however that the design choice involving a global variable is OK. It would be really exciting to have the vector clock and history slice functionality. The project spec was appropriate for the time given, but I would love to see what a visualization of a slice of a distributed system looks like. I'm not advocating that future iterations of the class build this; I'd just like to see it.
 
+Machine/process instead of machine/thread. There exist fundamental differences between processes and threads (ex shared memory). Under machine/process we eliminate the "kosher" justification we'd need under machine/thread.
+
