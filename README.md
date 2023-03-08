@@ -44,7 +44,7 @@ Trial | Machine 1 | Machine 2 | Machine 3
 An similar result is found here: a faster clock speed generally implies a lower mean message queue length. This again makes intuitive sense as faster machines will effectively have more processing resources to get through their messages, while slower machines will be stuck processing old messages from the more powerful machines.
 
 ### Terminating Drifts
-Next we examine the max drift values. This value is calculated by looking at the wall clock and then deriving the wall clock based off the logical clock, and seeing how far off they are at the point of process termination.
+Next we examine the terminating drift values. This value is calculated by looking at the wall clock and then deriving the wall clock based off the logical clock, and seeing how far off they are at the point of process termination.
 Trial | Machine 1 | Machine 2 | Machine 3
 ------------ | ------------ | ------------ | ------------ 
 1 | 162.42 `@2hz` | 324.44 `@1hz` | -2.75 `@5hz`
@@ -53,7 +53,7 @@ Trial | Machine 1 | Machine 2 | Machine 3
 4 | -2.47 `@6hz` | 218.31 `@2hz` | 52.30 `@4hz`
 5 | -2.13 `@4hz` | 324.46 `@1hz` | 106.88 `@2hz`
 
-An similar result is found here: a faster clock speed generally implies a lower terminating drift value. This makes sense, as it again follows the paradigm of the faster clock speed machines "setting the rules" and everyone else playing catch-up. Since the faster clock speed machines are basically the ones always setting the clock, it is intuitive for them to have lower drifts. 
+A familiar result is found here: a faster clock speed generally implies a lower terminating drift value. This makes sense, as it again follows the paradigm of the faster clock speed machines "setting the rules" and everyone else playing catch-up. Since the faster clock speed machines are basically the ones always setting the clock, it is intuitive for them to have lower drifts. 
 
 ## Analysis with Alterations
 Next, we altered our program by decreasing the variation in clock cycles from (1,6) to (1,2) and decreasing the probability that a given event is internal from 7/10 to 1/4. 
@@ -182,12 +182,8 @@ Spot check log for cyclical execution instructions, lamport clock jumps = 1.
 Allows us to rigorously determine that our Lamport Clock equations are implemented as specified.
 
 # Discussion
-We started by drawing out the theory behind the logical clock on an iPad and then brainstorming a networking stack. We originally considered using HTTP requests. 
+We started by drawing out the theory behind the logical clock on an iPad and then brainstorming a networking stack. We originally considered using HTTP requests but eventually opted for sockets, considering the simplicity of the data being transferred. We started by building our Python program to output logs for one trial at a time, planning to upload these to Google Sheets to perform our data analysis. After realizing how slow of a process this was, we instead opted to generate logs for all 5 trials simultaneously and then conduct our data analysis locally via `analysis.py`, which was far faster and allowed us to iterate better.
 
-Design Notes:
-A drawback of our design is n machines $\rightarrow$ $3n^2$ sockets. In general, I dislike anything which goes like $n^2$.
-The tf's design had producer and consumer threads (we keep this), and a global variable (we scrap this). 
-- We prefer to model the distributed system without a global variable, understanding however that the design choice involving a global variable is OK.
-
-It would be really exciting to have the vector clock and history slice functionality. The project spec was appropriate for the time given, but I would love to see what a visualization of a slice of a distributed system looks like. I'm not advocating that future iterations of the class build this; I'd just like to see it.
+### Design Notes
+A drawback of our design is n machines $\rightarrow$ $3n^2$ sockets. In general, I dislike anything which goes like $n^2$. The TF's design had producer and consumer threads (we kept this), and a global variable (we scrapped this). We prefer to model the distributed system without a global variable, understanding however that the design choice involving a global variable is OK. It would be really exciting to have the vector clock and history slice functionality. The project spec was appropriate for the time given, but I would love to see what a visualization of a slice of a distributed system looks like. I'm not advocating that future iterations of the class build this; I'd just like to see it.
 
