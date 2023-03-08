@@ -95,10 +95,6 @@ We perform unit tests and integration tests, as specified in the problem stateme
 python3 unit_tests.py <f>
 ```
 
-
-# Engineering Notebook
-We started by drawing out the theory behind the logical clock on an iPad and then brainstorming a networking stack. We originally considered using HTTP requests 
-
 f = 0 triggers test_robustness()
 f = 1 triggers test_connections()
 f = 2 triggers test_producer()
@@ -186,9 +182,12 @@ Spot check log for cyclical execution instructions, lamport clock jumps = 1.
 Allows us to rigorously determine that our Lamport Clock equations are implemented as specified.
 
 # Discussion
-#drawback of our design: n machines --> 3n^2 sockets
+We started by drawing out the theory behind the logical clock on an iPad and then brainstorming a networking stack. We originally considered using HTTP requests. 
 
-#tf design had producer and consumer threads (good modular design), and a global variable (we scrap this)
+Design Notes:
+A drawback of our design is n machines $\rightarrow$ $3n^2$ sockets. In general, I dislike anything which goes like $n^2$.
+The tf's design had producer and consumer threads (we keep this), and a global variable (we scrap this). 
+- We prefer to model the distributed system without a global variable, understanding however that the design choice involving a global variable is OK.
 
-#seems uncouth to model a distributed system w a global variable?
+It would be really exciting to have the vector clock and history slice functionality. The project spec was appropriate for the time given, but I would love to see what a visualization of a slice of a distributed system looks like. I'm not advocating that future iterations of the class build this; I'd just like to see it.
 
