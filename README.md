@@ -84,7 +84,7 @@ Trial | Machine 1 | Machine 2 | Machine 3
 4 | 10.959 `@2hz` | 11.408 `@2hz` | 65.452 `@1hz`
 5 | 10.968 `@2hz` | 10.977 `@2hz` | 69.472 `@1hz`
 
-We notice overall, across all three charts, that our numbers are less harsh and more similar within themselves. Mean jump times are all below two, mean message queue remain low, and the terminating drifts aren't nearly as significant.
+We notice overall, across the first and third charts, that our numbers are less harsh and more similar within themselves. Mean jump times are all below two, and the terminating drifts aren't nearly as significant. However, the mean message queue lengths only got worse. For instance, our longest mean message queue length is now 23.610 as opposed to 15.265. This is likely because we decreased the probability of internal events, hence increasing the overall probability of non-internal events, which distribute messages across the virtualized machines.
 
 # Testing
 We perform unit tests and integration tests, as specified in the problem statement.
