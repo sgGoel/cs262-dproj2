@@ -18,7 +18,7 @@ To run our analysis tool, do as follows.
 python3 analysis.py
 ```
 
-# Results
+# Analysis
 We start by examining the logs of a two-minute run, and discussing the size of the jumps in the values for the logical clocks. We measure these jumps by calculating the mean jump value on a given machine's logical clock. A table of results across five trials is contained below.
 Trial | Machine 1 | Machine 2 | Machine 3
 ------------ | ------------ | ------------ | ------------ 
@@ -40,3 +40,15 @@ Trial | Machine 1 | Machine 2 | Machine 3
 5 | 0.000 `@4hz` | 4.018 `@1hz` | 0.180 `@2hz`
 
 An similar result is found here: a faster clock speed generally implies a lower mean message queue length. This again makes intuitive sense as faster machines will effectively have more processing resources to get through their messages, while slower machines will be stuck processing old messages from the more powerful machines.
+
+# Testing
+We perform integration tests and unit tests.
+### Integration Tests
+```bash
+python3 integration_tests.py
+```
+### Unit Tests
+```bash
+python3 unit_tests.py 
+```
+
