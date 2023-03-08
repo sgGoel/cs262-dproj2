@@ -59,12 +59,12 @@ def handle_connections(m, host, debug=False):
         conn, addr = m.s.accept() #blocking
         start_new_thread(consumer, (conn, m, debug))
 
-def exec_instruction(m, writer, debug=False, n=2, counter=-1):
+def exec_instruction(m, writer, debug=False, n=2, counter=-1, hardcoded=-1):
     exc = random.randint(1,10) #generate instruction for this cycle
     if debug:
         exc = (counter % 10) + 1
     m.clock+=1
-    if (exc > 3) or (debug and n == 0) or (debug and n == 1 and exc == 2):
+    if (exc > 3) or (debug and n == 0) or (debug and n == 1 and exc == 2) or hardcoded==0:
         #internal event
         writer.writerow([exc, time.time(), m.clock, -1, -1, -1])
         return
@@ -77,7 +77,7 @@ def exec_instruction(m, writer, debug=False, n=2, counter=-1):
     writer.writerow([exc, time.time(), m.clock, f'{m.clock}, {m.id}', -1, -1]) #addition to spec: m.id
     
 
-def run_machine(id_code, host, port, port1, port2, fname, debug=False, c=-1, neighbors=2):
+def run_machine(id_code, host, port, port1, port2, fname, debug=False, c=-1, neighbors=2, hardcoded=-1):
     if debug: 
         m = Machine(id_code, host, port, debug, c) #init machine data structure, w preset cycle
     else: 
@@ -117,7 +117,7 @@ def run_machine(id_code, host, port, port1, port2, fname, debug=False, c=-1, nei
         if not debug:
             exec_instruction(m, writer)
         else:
-            exec_instruction(m, writer, debug, neighbors, debug_counter)
+            exec_instruction(m, writer, debug, neighbors, debug_counter, hardcoded)
 
 
 if __name__ == '__main__':

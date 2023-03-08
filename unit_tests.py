@@ -59,12 +59,12 @@ def test_producer():
 
 
 if __name__ == "__main__":
-    #try:
-    if int(sys.argv[1]) == 0:
-        test_robustness()
-    if int(sys.argv[1]) == 1:
-        test_connections()
-    if int(sys.argv[1]) == 2:
-        test_producer()
-    #except:
-        #print("Incorrect Usage")
+    try:
+        if int(sys.argv[1]) == 0:
+            test_robustness()
+        if int(sys.argv[1]) == 1:
+            test_connections()
+        if int(sys.argv[1]) == 2:
+            test_producer()
+    except:
+        print("Incorrect Usage")

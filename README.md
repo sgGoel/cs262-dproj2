@@ -43,12 +43,27 @@ An similar result is found here: a faster clock speed generally implies a lower 
 
 # Testing
 We perform integration tests and unit tests.
+
 ### Integration Tests
 ```bash
-python3 integration_tests.py
+python3 integration_tests.py <f>
 ```
+
+ f = 0 triggers test_robustness()
+ f = 1 triggers test_robustness_hardcoded()
+
 ### Unit Tests
 ```bash
-python3 unit_tests.py 
+python3 unit_tests.py <f>
 ```
+
+f = 0 triggers test_robustness()
+f = 1 triggers test_connections()
+f = 2 triggers test_producer()
+
+**Robustness Test**
+
+**Connections Test**
+
+**Producer Test**
 
