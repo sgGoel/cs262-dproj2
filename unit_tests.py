@@ -25,7 +25,7 @@ def test_connections():
     s2 = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s2.connect((localHost, port1))
 
-    #test server handle_connections() functionality #send messages from client to server
+    #test server handle_connections() functionality (send messages from client to server)
     counter = 0
     while True:
         time.sleep(m.cycle)
@@ -67,4 +67,4 @@ if __name__ == "__main__":
         if int(sys.argv[1]) == 2:
             test_producer()
     except:
-        print("Incorrect Usage")
+        print("Error")

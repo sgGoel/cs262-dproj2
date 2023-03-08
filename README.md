@@ -42,15 +42,7 @@ Trial | Machine 1 | Machine 2 | Machine 3
 An similar result is found here: a faster clock speed generally implies a lower mean message queue length. This again makes intuitive sense as faster machines will effectively have more processing resources to get through their messages, while slower machines will be stuck processing old messages from the more powerful machines.
 
 # Testing
-We perform integration tests and unit tests.
-
-### Integration Tests
-```bash
-python3 integration_tests.py <f>
-```
-
- f = 0 triggers test_robustness()
- f = 1 triggers test_robustness_hardcoded()
+We perform unit tests and integration tests, as specified in the problem statement.
 
 ### Unit Tests
 ```bash
@@ -62,8 +54,83 @@ f = 1 triggers test_connections()
 f = 2 triggers test_producer()
 
 **Robustness Test**
+We replace 1-10 dice roll executions with 1-10 cyclical executions.
+
+No terminal output.
+
+Spot check log output for cyclical execution instructions, lamport clock jumps=1. 
+
+There are no messages sent or received. This test evaluates the boilerplate of run_machine(). 
 
 **Connections Test**
+We replace 1-10 dice roll executions with 1-10 cyclical executions.
+
+Terminal output should match the following pattern exactly:
+
+(Debug) received:  msg: 0
+(Debug) received:  msg: 1
+(Debug) received:  msg: 2
+(Debug) received:  msg: 3
+
+No log output.
+
+Allows us to test handle_connections() functionality in isolation. We set up a testing server/client and call handle_connections(). Tests 1) server handling of client connection and 2) server handling of messages. 
 
 **Producer Test**
+We replace 1-10 dice roll executions with 1-10 cyclical executions.
 
+Terminal output should match the following pattern exactly:
+
+Client-side(1)connection success to port val: 1050 
+msg: 0
+msg: 1
+msg: 2
+msg: 3
+
+No log output.
+
+Allows us to test producer() functionality. We set up a testing server/client and call handle_connections() and producer() (recall handle_connections() was already tested in isolation). Tests 1) client connection and 2) client-side message queue functionality.
+
+### Integration Tests
+```bash
+python3 integration_tests.py <f>
+```
+
+ f = 0 triggers test_robustness()
+ f = 1 triggers test_robustness_hardcoded()
+
+**Robustness Test**
+We replace 1-10 dice roll executions with 1-10 cyclical executions.
+
+Spot check terminal output for either alternating messages, sent by process 1 and process 2, or messages sent only by process 1 or process 2. Command execution is cyclical, so the system should get stuck in one of these two patterns, depending on arbitrary order of executions in thread initialization.
+
+local time, sent by:  2, 1
+local time, sent by:  2, 2
+local time, sent by:  10, 1
+local time, sent by:  10, 2
+local time, sent by:  12, 2
+local time, sent by:  12, 1
+
+OR 
+
+local time, sent by:  2, 1
+local time, sent by:  10, 1
+local time, sent by:  12, 1
+local time, sent by:  20, 1
+
+Spot check log for cyclical execution instructions, lamport clock jumps = 1.
+
+Note: Pattern 2 will reset to Pattern 1, given enough time. 
+
+Simplifies distributed system interaction, allows human verification and step through of message send/receive interaction.
+
+**Robustness Test Hardcoded**
+We replace 1-10 dice roll executions with 1-10 cyclical executions.
+We limit process 1 to executing internal instructions and receiving messages
+$\implies$ only process 2 can send messages
+
+Terminal output should match integration_hardcoded.txt exactly, up till end of file.
+
+Spot check log for cyclical execution instructions, lamport clock jumps = 1.
+
+Allows us to rigorously determine that our Lamport Clock equations are implemented as specified.

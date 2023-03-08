@@ -44,4 +44,4 @@ if __name__ == "__main__":
         if int(sys.argv[1]) == 1:
             test_robustness_hardcoded()
     except:
-        print("Incorrect Usage")
+        print("Error")
