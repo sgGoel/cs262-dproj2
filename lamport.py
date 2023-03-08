@@ -10,15 +10,16 @@ import threading
 from _thread import *
 from threading import Thread
 
-#discussion:
-    #drawback of our design: n machines --> 3n^2 sockets
-    #tf design had producer and consumer threads (good modular design), and a global variable (we scrap this)
-        #seems uncouth to model a distributed system w a global variable?
+"""
+Run a simulated distributed system with three "machines" (1 Machine object/process). 
+    Update local clock time on each Machine event
+    Log local clock times, for analysis and testing
+"""
 
 class Machine:
     def __init__(self, id_code, host, port, debug=False, c=-1):
         self.id = id_code
-        self.cycle = 1/random.randint(1,2)
+        self.cycle = 1/random.randint(1,6)
         if debug: 
             self.cycle = c
         self.q = queue.Queue() #thread safe in python
@@ -59,25 +60,25 @@ def handle_connections(m, host, debug=False):
         conn, addr = m.s.accept() #blocking
         start_new_thread(consumer, (conn, m, debug))
 
-def exec_instruction(m, writer, debug=False, n=2, counter=-1):
-    exc = random.randint(1,4) #generate instruction for this cycle
+def exec_instruction(m, writer, debug=False, n=2, counter=-1, hardcoded=-1):
+    exc = random.randint(1,10) #generate instruction for this cycle
     if debug:
         exc = (counter % 10) + 1
     m.clock+=1
-    if (exc == 4):
+    if (exc > 3) or (debug and n == 0) or (debug and n == 1 and exc == 2) or hardcoded==0:
         #internal event
         writer.writerow([exc, time.time(), m.clock, -1, -1, -1])
         return
-    if (exc==1 or exc==3):
+    if (n > 0 or (not debug)) and (exc==1 or exc==3):
         #send message to neighbor 1
         m.connections[0].send(f'{m.clock}, {m.id}'.encode('utf-8')) 
-    if (exc==2 or exc==3):
+    if (n > 1 or (not debug)) and (exc==2 or exc==3):
         #send message to neighbor 2
         m.connections[1].send(f'{m.clock}, {m.id}'.encode('utf-8'))
     writer.writerow([exc, time.time(), m.clock, f'{m.clock}, {m.id}', -1, -1]) #addition to spec: m.id
     
 
-def run_machine(id_code, host, port, port1, port2, fname, debug=False, c=-1, neighbors=2):
+def run_machine(id_code, host, port, port1, port2, fname, debug=False, c=-1, neighbors=2, hardcoded=-1):
     if debug: 
         m = Machine(id_code, host, port, debug, c) #init machine data structure, w preset cycle
     else: 
@@ -117,7 +118,7 @@ def run_machine(id_code, host, port, port1, port2, fname, debug=False, c=-1, nei
         if not debug:
             exec_instruction(m, writer)
         else:
-            exec_instruction(m, writer, debug, neighbors, debug_counter)
+            exec_instruction(m, writer, debug, neighbors, debug_counter, hardcoded)
 
 
 if __name__ == '__main__':
@@ -127,8 +128,10 @@ if __name__ == '__main__':
     port2 = 2061
     port3 = 2062
 
+    #run 5 system trials
     for x in range(1, 6):
 
+        #each system trial runs on a different set of ports
         port1 += 3*x
         port2 += 3*x
         port3 += 3*x
