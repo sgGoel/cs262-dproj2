@@ -18,7 +18,7 @@ from threading import Thread
 class Machine:
     def __init__(self, id_code, host, port, debug=False, c=-1):
         self.id = id_code
-        self.cycle = 1/random.randint(1,6)
+        self.cycle = 1/random.randint(1,2)
         if debug: 
             self.cycle = c
         self.q = queue.Queue() #thread safe in python
@@ -60,18 +60,18 @@ def handle_connections(m, host, debug=False):
         start_new_thread(consumer, (conn, m, debug))
 
 def exec_instruction(m, writer, debug=False, n=2, counter=-1):
-    exc = random.randint(1,10) #generate instruction for this cycle
+    exc = random.randint(1,4) #generate instruction for this cycle
     if debug:
         exc = (counter % 10) + 1
     m.clock+=1
-    if (exc > 3) or (debug and n == 0) or (debug and n == 1 and exc == 2):
+    if (exc == 4):
         #internal event
         writer.writerow([exc, time.time(), m.clock, -1, -1, -1])
         return
-    if (n > 0 or (not debug)) and (exc==1 or exc==3):
+    if (exc==1 or exc==3):
         #send message to neighbor 1
         m.connections[0].send(f'{m.clock}, {m.id}'.encode('utf-8')) 
-    if (n > 1 or (not debug)) and (exc==2 or exc==3):
+    if (exc==2 or exc==3):
         #send message to neighbor 2
         m.connections[1].send(f'{m.clock}, {m.id}'.encode('utf-8'))
     writer.writerow([exc, time.time(), m.clock, f'{m.clock}, {m.id}', -1, -1]) #addition to spec: m.id
