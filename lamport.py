@@ -1,4 +1,4 @@
-from multiprocessing import Process #Machine/process instead of machine/thread. There exist fundamental differences between processes and threads (ex shared memory). Under machine/process we eliminate the "this is kosher" reasoning we'd need under machine/thread.
+from multiprocessing import Process
 import queue
 import csv
 import random

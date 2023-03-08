@@ -185,9 +185,12 @@ Allows us to rigorously determine that our Lamport Clock equations are implement
 We started by drawing out the theory behind the logical clock on an iPad and then brainstorming a networking stack. We originally considered using HTTP requests. 
 
 Design Notes:
+Machine/process instead of machine/thread. There exist fundamental differences between processes and threads (ex shared memory). Under machine/process we eliminate the "kosher" justification we'd need under machine/thread.
+
 A drawback of our design is n machines $\rightarrow$ $3n^2$ sockets. In general, I dislike anything which goes like $n^2$.
+
 The tf's design had producer and consumer threads (we keep this), and a global variable (we scrap this). 
 - We prefer to model the distributed system without a global variable, understanding however that the design choice involving a global variable is OK.
 
-It would be really exciting to have the vector clock and history slice functionality. The project spec was appropriate for the time given, but I would love to see what a visualization of a slice of a distributed system looks like. I'm not advocating that future iterations of the class build this; I'd just like to see it.
+Suggested improvement: It would be really exciting to see the vector clock and history slice functionality. The project spec was appropriate for the time given, but I would love to see what a visualization of a slice of a distributed system looks like. *I'm not advocating that future iterations of the class build this*; I'd just like to see it.
 
