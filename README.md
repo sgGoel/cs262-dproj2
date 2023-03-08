@@ -1,4 +1,3 @@
-# cs262-dproj2
 
 # Getting Started
 *Tested on Python 3.10.10 using MacOS Ventura 13.2.1*
