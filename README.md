@@ -134,3 +134,10 @@ Terminal output should match integration_hardcoded.txt exactly, up till end of f
 Spot check log for cyclical execution instructions, lamport clock jumps = 1.
 
 Allows us to rigorously determine that our Lamport Clock equations are implemented as specified.
+
+# Discussion
+#drawback of our design: n machines --> 3n^2 sockets
+
+#tf design had producer and consumer threads (good modular design), and a global variable (we scrap this)
+
+#seems uncouth to model a distributed system w a global variable?

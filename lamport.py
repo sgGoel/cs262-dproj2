@@ -10,10 +10,11 @@ import threading
 from _thread import *
 from threading import Thread
 
-#discussion:
-    #drawback of our design: n machines --> 3n^2 sockets
-    #tf design had producer and consumer threads (good modular design), and a global variable (we scrap this)
-        #seems uncouth to model a distributed system w a global variable?
+"""
+Run a simulated distributed system with three "machines" (1 Machine object/process). 
+    Update local clock time on each Machine event
+    Log local clock times, for analysis and testing
+"""
 
 class Machine:
     def __init__(self, id_code, host, port, debug=False, c=-1):
@@ -127,8 +128,10 @@ if __name__ == '__main__':
     port2 = 2061
     port3 = 2062
 
+    #run 5 system trials
     for x in range(1, 6):
 
+        #each system trial runs on a different set of ports
         port1 += 3*x
         port2 += 3*x
         port3 += 3*x
